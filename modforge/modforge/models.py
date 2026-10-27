@@ -85,6 +85,8 @@ class Profile:
 class Settings:
     """Application settings."""
     default_mod_library: str = ""
+    game_directory: str = ""
+    headless_mode: bool = False
     last_used_profile: str = ""
     created_at: datetime = None
     updated_at: datetime = None

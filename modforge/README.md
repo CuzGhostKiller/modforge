@@ -78,23 +78,36 @@ python -m modforge
 ### Command Line Interface
 
 ```bash
-# Launch ModForge
-python -m modforge
-
-# Run with specific game directory
-python -m modforge --game-dir "/path/to/your/game"
+# Launch ModForge (GUI mode)
+python -m modforge.main
 
 # Run in headless mode (for scripting)
-python -m modforge --headless
+python -m modforge.main --headless
+
+# Run with specific game directory
+python -m modforge.main --game-dir "/path/to/your/game"
 ```
 
 ### GUI Interface
 
 1. Launch ModForge
-2. Add your game directory
-3. Discover available mods
-4. Create profiles and organize your mods
-5. Manage load order and enable/disable mods
+2. Go to Settings (File > Settings)
+3. Configure your mod library directory and game directory
+4. Enable headless mode if needed
+5. Create profiles and organize your mods
+6. Manage load order and enable/disable mods
+
+### Headless Mode Features
+
+When running in headless mode, ModForge provides basic information about your current setup:
+
+```bash
+$ python -m modforge.main --headless
+Running in headless mode
+Current profile: Default
+Total mods: 42
+Total profiles: 3
+```
 
 ## 📁 Project Structure
 

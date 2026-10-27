@@ -4,6 +4,8 @@
 
 import sys
 import os
+import argparse
+from datetime import datetime
 from PySide6.QtWidgets import QApplication
 from PySide6.QtGui import QIcon
 from PySide6.QtCore import QStandardPaths
@@ -18,8 +20,9 @@ from .gui.main_window import MainWindow
 class ModForgeApplication:
     """Main application class that ties everything together."""
 
-    def __init__(self):
+    def __init__(self, headless=False):
         """Initialize the application."""
+        self.headless = headless
         self.app = QApplication(sys.argv)
         self.app.setApplicationName("ModForge Game Mod Manager")
         self.app.setOrganizationName("ModForge")
@@ -70,13 +73,32 @@ class ModForgeApplication:
 
     def run(self):
         """Run the application."""
-        self.main_window.show()
-        return self.app.exec()
+        if self.headless:
+            print("Running in headless mode")
+            # In headless mode, we could add command-line operations here
+            # For now, just show basic info
+            print(f"Current profile: {self.data.get_current_profile().name if self.data.get_current_profile() else 'None'}")
+            print(f"Total mods: {len(self.data.mods)}")
+            print(f"Total profiles: {len(self.data.profiles)}")
+            return 0
+        else:
+            self.main_window.show()
+            return self.app.exec()
 
 def main():
     """Main entry point."""
     try:
-        app = ModForgeApplication()
+        # Parse command line arguments
+        parser = argparse.ArgumentParser(description="ModForge Game Mod Manager")
+        parser.add_argument("--headless", action="store_true", help="Run in headless mode")
+        parser.add_argument("--game-dir", "--game-directory", help="Set game directory")
+        args = parser.parse_args()
+
+        app = ModForgeApplication(headless=args.headless)
+        if args.game_dir:
+            app.data.settings.game_directory = args.game_dir
+            app.data.settings.updated_at = datetime.now()
+            app.persistence.save_data(app.data)
         return app.run()
     except Exception as e:
         print(f"Fatal error: {e}")
